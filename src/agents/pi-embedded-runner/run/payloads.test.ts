@@ -67,6 +67,38 @@ describe("buildEmbeddedRunPayloads tool-error warnings", () => {
     expectSinglePayloadText(payloads, "Done.");
   });
 
+  it("uses final-answer assistant text when one accumulated text includes commentary", () => {
+    const payloads = buildPayloads({
+      assistantTexts: ["Need inspect.\n\nDone."],
+      lastAssistant: {
+        role: "assistant",
+        stopReason: "stop",
+        content: [
+          {
+            type: "text",
+            text: "Need inspect.",
+            textSignature: JSON.stringify({
+              v: 1,
+              id: "item_commentary",
+              phase: "commentary",
+            }),
+          },
+          {
+            type: "text",
+            text: "Done.",
+            textSignature: JSON.stringify({
+              v: 1,
+              id: "item_final",
+              phase: "final_answer",
+            }),
+          },
+        ],
+      } as AssistantMessage,
+    });
+
+    expectSinglePayloadText(payloads, "Done.");
+  });
+
   it("falls back to final-answer assistant text when streamed text only contains blanks", () => {
     const payloads = buildPayloads({
       assistantTexts: ["   "],
