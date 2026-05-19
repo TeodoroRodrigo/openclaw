@@ -541,8 +541,9 @@ Example:
     - optional sender allowlists: `users` (stable IDs recommended) and `roles` (role IDs only); if either is configured, senders are allowed when they match `users` OR `roles`
     - direct name/tag matching is disabled by default; enable `channels.discord.dangerouslyAllowNameMatching: true` only as break-glass compatibility mode
     - names/tags are supported for `users`, but IDs are safer; `openclaw security audit` warns when name/tag entries are used
-    - if a guild has `channels` configured, non-listed channels are denied
+    - if a guild has `channels` configured, listed channels are allowed and non-listed channels are denied
     - if a guild has no `channels` block, all channels in that allowlisted guild are allowed
+    - channel entries use the channel key as the allowlist entry; add fields only for overrides such as `requireMention`, `users`, `roles`, `tools`, `skills`, or `systemPrompt`
 
     Example:
 
@@ -558,8 +559,8 @@ Example:
           users: ["987654321098765432"],
           roles: ["123456789012345678"],
           channels: {
-            general: { allow: true },
-            help: { allow: true, requireMention: true },
+            general: {},
+            help: { requireMention: true },
           },
         },
       },
